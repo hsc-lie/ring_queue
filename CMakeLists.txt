@@ -4,21 +4,46 @@ project(ring_queue_test C)
 
 add_executable(${PROJECT_NAME})
 
-#设置生成目标的目录
-set(EXECUTABLE_OUTPUT_PATH out)
+#是否开启更详细的编译过程信息显示
+SET(CMAKE_VERBOSE_MAKEFILE OFF)
 
 # 彩色日志输出；
 set(CMAKE_COLOR_DIAGNOSTICS TRUE)
 
+#设置生成目标的目录
+set(EXECUTABLE_OUTPUT_PATH out)
+
+#C标准
+set(C_STD -std=c99)
+
+#优化等级
+set(OPT -O0 -g)
+
+#全局宏
+target_compile_definitions(${PROJECT_NAME}
+    PRIVATE
+    ${CMAKE_HOST_SYSTEM_NAME}
+)
+
+#头文件路径
+target_include_directories(${PROJECT_NAME}
+    PRIVATE
+    test
+    ring_queue
+)
+
+#源文件
 target_sources(${PROJECT_NAME}
     PRIVATE
     main.c
+    test/ring_queue_test.c
+    ring_queue/ring_queue.c
 )
 
-add_subdirectory(ring_queue)
-add_subdirectory(test)
-
+#编译参数
 target_compile_options(${PROJECT_NAME}
     PRIVATE
-    -Wall -O0 -g
+    ${C_STD}
+    -Wall
+    ${OPT}
 )
